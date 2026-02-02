@@ -1,0 +1,360 @@
+
+.wrapCharCodes {
+	margin: 0 0 30px 0;
+}
+.charactercodes {
+	clear: both;
+	display: none;
+}
+#allCharactersByNumber {
+	min-height: 200px;
+}
+.generatorList li span {
+    font-weight: bold;
+    background-color: rgba(0,0,0,0.3);
+    display: inline-block;
+    padding: 2px 3px;
+    color: #FFF;
+    text-align: center;
+}
+.generatorList li a.activeGenerator span {
+	background-color: transparent;
+    color: #000;
+	display: none;
+}
+.wrapCharacter {
+    border: 1px solid #ccc;
+	overflow: hidden;
+    text-align: center;
+    display: inline-block;
+    width: 165px;
+    font-size: 20px;
+    margin: 0 12px 25px;
+    border-radius: 8px;
+    padding: 0 10px 15px;
+    position: relative;
+}
+.characterDisplay {
+    font-size: 75px;
+	cursor: pointer;
+    height: 95px;
+    line-height: 95px;
+    font-family: apple color emoji,segoe ui emoji,notocoloremoji,segoe ui symbol,android emoji,emojisymbols,emojione mozilla;
+}
+.htmlCode, .htmlEntity {
+    cursor: pointer;
+    line-height: 25px;
+    height: 25px;
+    border: 0px;
+    max-width: 100%;
+    text-align: center;
+    color: #333;
+    font-weight: normal;
+    font-family: Arial,Helvetica,sans-serif;
+}
+a.populateEditor {
+    display: inline-block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 25px;
+    height: 25px;
+    line-height: 20px;
+    text-align: center;
+    font-weight: bold;
+    color: #bbb;
+    cursor: pointer;
+}
+a.populateEditor:hover {
+	color: #EEE;
+	background-color: #555;
+}
+.wrapCharacter:hover {
+	border: 1px solid #333;
+}
+.charDescription {
+    background-color: #ddd;
+    color: #333;
+	cursor: pointer;
+    margin: 0 -10px;
+    padding: 0 5px;
+    text-align: center;
+}
+.charDescription > div {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    height: 40px;
+    font-size: 14px;
+    line-height: 14px;
+    text-transform: capitalize;
+}
+a.changeBigThumbs {
+    text-align: right;
+	color: #333;
+	display: block;
+    cursor: pointer;
+    font-size: 30px;
+    background-color: #eee;
+    margin-bottom: 5px;
+    line-height: 30px;
+    padding: 2px 10px;
+}
+.changeBigThumbs:hover {
+	color: #000;
+}
+.smallThumbnails .characterDisplay {
+    font-size: 36px;
+    height: 40px;
+    line-height: 36px;
+}
+.smallThumbnails .wrapCharacter {
+    width: 60px;
+    font-size: 14px;
+	border: 1px solid #fff;
+    margin: 0 4px 5px;
+    border-radius: 5px;
+    padding: 0 4px 0px;
+}
+.smallThumbnails .wrapCharacter:hover {
+    border: 1px solid #999;
+}
+.smallThumbnails .charDescription, .smallThumbnails a.populateEditor {
+	display: none;
+}
+
+
+.smallThumbnails .htmlCode, .smallThumbnails .htmlEntity {
+    line-height: 15px;
+    height: 15px;
+}
+
+.floatingSidemenu {
+    position: fixed;
+    right: 0;
+    top: 200px;
+    width: 120px;
+    border-radius: 10px 0 0 10px;
+    background-color: #CE5937;
+	z-index: 99;
+    height: 254px;
+    overflow-y: scroll;
+    border: 5px solid #CE5937;
+    line-height: 18px;
+}
+.floatingSidemenu a {
+    display: block;
+    color: #FFF;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+}
+.floatingSidemenu a:hover, a.activeFloatOption {
+	background-color: #eee;
+	color: #B95031;
+}
+
+#oneCharacterByNumber {
+	width: 215px;
+	margin: auto;
+}
+#errorMesszidzs {
+	color: #CE5937;
+}
+#chracterCodeInput, #characterInput {
+    border: 2px solid #CE5937;
+    width: 100px;
+    font-weight: bold;
+    font-size: 25px;
+    margin: 0 10px;
+    border-radius: 3px;
+    text-align: center;
+}
+#characterInputCode {
+    border: 2px solid #bbb;
+    width: 140px;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 0 10px;
+    border-radius: 3px;	
+}
+.rightTable {
+	width: 290px;
+	float: right;
+	margin: 0 0 20px 50px;
+}
+table.nobordertbl, .nobordertbl th, .nobordertbl td {
+	border: none;
+}
+.nobordertbl {
+	margin-bottom: 20px;
+}
+.nobordertbl caption {
+	color: #CE5937;
+	font-weight: bold;
+	font-size: 18px;
+	    margin-bottom: 20px;
+	font-style: normal;
+}
+#charCalculatorTable {
+    display: block;
+    margin: 10px auto 15px;
+	line-height: 16px;
+    max-width: 510px;
+}
+#charCalculatorTable td {
+	padding: 10px 2px;
+}
+
+/*Character Picker Search BEGIN*/
+#wrapCharSearch {
+    margin: 25px auto 40px;
+    display: block;
+	text-align: center;
+}
+#searchChar {
+    border: 2px solid #CE5937;
+    font-size: 30px;
+    line-height: 40px;
+    border-radius: 20px;
+    outline: none !important;
+    padding: 2px 16px;
+    width: 200px;
+}
+.emojis {
+    padding: 10px 20px 60px;
+    position: relative;
+}
+.searchLabel {
+	font-size: 2em;
+	color: #555;
+}
+#suggestionBubble {
+    position: absolute;
+    bottom: 0px;
+    right: 175px;
+    z-index: 13;
+    text-align: center;
+    font-weight: bold;
+    color: #CE5937;
+    display: none;
+}
+#suggestionBubble span {
+    font-size: 34px;
+    -moz-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(-145deg);
+    display: block;
+    margin: 3px 81px -20px 0px;
+    text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000;
+}
+#suggestionBubble em {
+    font-size: 20px;
+    color: #000;
+    line-height: 17px;
+}
+#categoryFilter {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    border-bottom: 2px solid #ce5937;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+#categoryFilter > span {
+    display: inline-block;
+    padding: 3px 10px 1px;
+    cursor: pointer;
+    color: #555;
+    border-radius: 8px;
+}
+#categoryFilter > span.activeCat {
+    background: #CE5937 !important;
+    color: #FFF !important;
+}
+#categoryFilter > span > span {
+    font-size: 1.5em;
+    font-family: apple color emoji,segoe ui emoji,notocoloremoji,segoe ui symbol,android emoji,emojisymbols,emojione mozilla;
+}
+#categoryFilter span:hover {
+	color: #000;
+	background: #ffe6c5;
+}
+.emocat {
+	text-align: center;
+}
+.emocat > div {
+    display: none;
+    margin: 0;
+    width: 60px;
+    font-size: 14px;
+    text-align: center;
+    height: 60px;
+    line-height: 14px;
+    cursor: pointer;
+    position: relative;
+}
+.emocat > div.visibleChar {
+	display: inline-block;
+}
+.emocat > div > input {
+    font-size: 40px;
+    line-height: 60px;
+    height: 50px;
+    overflow: visible;
+    width: 100%;
+    cursor: pointer;
+    position: relative;
+    border: none;
+    border-radius: 6px;
+    text-align: center;
+    z-index: 10;
+    font-weight: 400;
+    font-family: apple color emoji,segoe ui emoji,notocoloremoji,segoe ui symbol,android emoji,emojisymbols,emojione mozilla;
+}
+.emocat input::-moz-selection { background-color: #CE5937;}
+.emocat input::selection { background-color: #CE5937; }
+
+.emocat > div > span {
+    display: block;
+    opacity: 0;
+    background: #000;
+    position: absolute;
+    bottom: -4px;
+    left: -20px;
+    right: -20px;
+    font-weight: bold;
+    line-height: 13px;
+    color: #FFF;
+    z-index: 14;
+    padding: 3px 3px 1px;
+    border-radius: 0 0 5px 5px;
+}
+.emocat > div:hover > span {
+	opacity: 0.9;
+}
+.emocat > div > span.hiddenSpan {
+	display: none;
+}
+.copied {
+    position: absolute;
+    background: #000;
+	color: #FFF;
+    font-size: 15px;
+    font-weight: bold;
+    line-height: 11px;
+    padding: 2px 5px;
+    bottom: 16px;
+    z-index: 10;
+    left: -8px;
+    right: -8px;
+	border-radius: 4px;
+}
+/*Character Picker Search END*/

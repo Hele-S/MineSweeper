@@ -1,0 +1,256 @@
+// ÚLTIMA EDIÇÃO 18/06
+// Estava tentando fazer os campos vazios ativar os campos adjacentes sem arriscar overflow exception
+// Último empasse foi ao tentar fazer primeiro o campo vazio que foi clicado revelar os campos numéricos adjacentes à ele
+// Por algúm motivo, os campos de cima e da esquerda estão respondendo como deveria mas o de baixo e o da direita não.
+// As vezes um campo numérico da mesma linha porém várias colunas à direita é revelado ao invés de ser o adjacente à direita
+
+const WinCondition = {
+    toBeCleared: 0,
+    Cleared: 0
+}
+
+class Timer {
+    constructor() {
+        this.second = 0
+        this.minute = 0
+        this.hour = 0
+        this.time = `00:00:00`
+        this.timer = null
+
+
+        StartTimer() 
+            this.timer = setInterval(() => {
+                second++
+                if (second == 60) {
+                    second = 0
+                    minute++
+                }
+                if (minute == 60) {
+                    minute = 0
+                    hour++
+                }
+                time = `${hour < 10 ? '0' + hour : hour}:${minute < 10 ? '0' + minute : minute}:${second < 10 ? '0' + second : second}`
+
+                HTMLtimer.innerText = time
+            }, 1000)
+        }
+            
+    }
+
+
+
+function BuildField(rows, columns, bombs) {
+
+    // Iniciando o jogo
+    let fieldSize = document.getElementsByTagName('li')
+    WinCondition['Cleared'] = 0
+    WinCondition['toBeCleared'] = fieldSize.length - bombs
+    let header = document.getElementById('header')
+    header.style.display = 'block'
+    let counter = document.getElementById('counter')
+    counter.innerText = bombs
+    let reaction = document.getElementById('reaction_face')
+    reaction.innerText = "🙂"
+
+    // Limpando o campo anterior
+    let field = document.getElementById('field')
+    while (field.hasChildNodes()) {
+        field.removeChild(field.firstChild);
+    }
+    field.classList.remove("disabled")
+    document.getElementById('result').innerText = ""
+
+
+    // Construindo o campo vazio
+    for (let i = 0; i < rows; i++) {
+        let newRow = document.createElement('ul');
+        newRow.id = "Row " + i;
+        for (let k = 0; k < columns; k++) {
+            let newColumn = document.createElement('li')
+            let flagslot = document.createElement('img')
+            flagslot.style.display = 'none'
+            flagslot.src = 'imagens/bandeira.png'
+            flagslot.classList.add("flag")
+            newColumn.appendChild(flagslot)
+            newColumn.id = i + "," + k;
+            newColumn.classList.add("Node");
+            newColumn.classList.add("hidden");
+            newColumn.addEventListener("mousedown", (e) => {
+                reaction.innerText = "😮"
+            })
+            newColumn.addEventListener("mouseup", (e) => {
+                reaction.innerText = "🙂"
+            })
+            newColumn.addEventListener("contextmenu", (e) => {
+                e.preventDefault()
+                if (newColumn.classList.contains("hidden") && !newColumn.classList.contains("flag")) {
+                    newColumn.classList.add("flag")
+                    counter.innerText = Number(counter.innerText) - 1
+                    flagslot.style.display = 'block'
+                } else if (newColumn.classList.contains("hidden") && newColumn.classList.contains("flag")) {
+                    newColumn.classList.remove("flag")
+                    counter.innerText = Number(counter.innerText) + 1
+                    flagslot.style.display = 'none'
+                }
+            }
+            );
+            newRow.appendChild(newColumn);
+        }
+        field.appendChild(newRow);
+    }
+
+    // Iniciando o timer
+    let HTMLtimer = document.getElementById('timer')
+    let second = 0
+    let minute = 0
+    let hour = 0
+    let time = `00:00:00`
+
+    // Plantando as bombas
+    let coordinates = new Array(bombs)
+    for (let i = 0; i < bombs; i++) {
+        do {
+            newSpot = [Math.floor(Math.random() * rows), Math.floor(Math.random() * columns)]
+        } while (coordinates.indexOf(newSpot.toString()) !== -1)
+        coordinates[i] = newSpot.toString()
+
+        let site = document.getElementById(newSpot.toString())
+        site.addEventListener("click", (e) => {
+            if (!e.target.classList.contains("flag")) {
+                GameOver(coordinates, JStimer)
+            }
+        });
+    }
+
+    // Preenchendo demais espaços
+    for (i = 0; i < rows; i++) {
+        for (k = 0; k < columns; k++) {
+            if (coordinates.indexOf(i + "," + k) === -1) {
+                SetOnClick(i, k, coordinates, document.getElementById(i + "," + k))
+            }
+        }
+    }
+
+
+}
+
+function Peek(StringRow, StringColumn) {
+    let row = Number(StringRow)
+    let column = Number(StringColumn)
+    let result = []
+    if (document.getElementById(`${(row - 1)},${column}`) !== null) result.push(document.getElementById(`${(row - 1)},${column}`))
+    if (document.getElementById(`${(row)},${column - 1}`) !== null) result.push(document.getElementById(`${(row)},${column - 1}`))
+    if (document.getElementById(`${(row)},${column + 1}`) !== null) result.push(document.getElementById(`${(row)},${column + 1}`))
+    if (document.getElementById(`${(row + 1)},${column}`) !== null) result.push(document.getElementById(`${(row + 1)},${column}`))
+    if (document.getElementById(`${(row - 1)},${column - 1}`) !== null) result.push(document.getElementById(`${(row - 1)},${column - 1}`))
+    if (document.getElementById(`${(row - 1)},${column + 1}`) !== null) result.push(document.getElementById(`${(row - 1)},${column + 1}`))
+    if (document.getElementById(`${(row + 1)},${column - 1}`) !== null) result.push(document.getElementById(`${(row + 1)},${column - 1}`))
+    if (document.getElementById(`${(row + 1)},${column + 1}`) !== null) result.push(document.getElementById(`${(row + 1)},${column + 1}`))
+    return result
+}
+
+function SetOnClick(i, k, coordinates, Node) {
+    let bombsAround = 0
+    let avoidList = []
+    let nodesAround = Peek(i, k)
+    nodesAround.forEach(e => {
+        if (coordinates.indexOf(e.id) !== -1) bombsAround++
+    });
+
+    // Campos com números
+    if (bombsAround > 0) {
+        Node.onclick = (e) => {
+            if (Node.classList.contains("hidden") && !Node.classList.contains("flag")) {
+                Node.classList.add("number")
+                e.target.innerHTML = bombsAround
+                WinCondition['Cleared'] = WinCondition['Cleared'] + 1
+                e.target.classList.remove("hidden")
+                CheckWinCon()
+            } else if (!Node.classList.contains("hidden")) {
+                nodesAround.forEach(e => {
+                    if (e.classList.contains("flag")) {
+                        avoidList.push(e)
+                    }
+                });
+                if (avoidList.length == bombsAround) {
+                    ClearField(Node, avoidList)
+                } else {
+                    avoidList = []
+                }
+            }
+
+        }
+
+        // Campos vazios
+    } else {
+        Node.classList.add("empty")
+        Node.onclick = () => {
+            if (Node.classList.contains("hidden") && !Node.classList.contains("flag")) {
+                Node.classList.remove("hidden")
+                Node.classList.add("clear")
+                WinCondition['Cleared'] = WinCondition['Cleared'] + 1
+                ClearField(Node, [])
+                CheckWinCon()
+            }
+        }
+    }
+}
+
+// Função com efeito recursivo para abrir os Nodes em cadeia
+function ClearField(node, avoidList) {
+    Peek(node.id.split(",")[0], node.id.split(",")[1]).forEach(e => {
+        if (e.classList.contains("flag") && avoidList.indexOf(e) === -1) {
+            e.classList.remove("flag")
+        }
+        if (e.classList.contains("hidden") && !e.classList.contains("flag")) {
+            e.click() //suscetível a stack overflow !
+        }
+    })
+}
+
+//Anuncia que o jogador perdeu
+function GameOver(coordinates, timer) {
+    for (i of coordinates) {
+        let site = document.getElementById(i)
+        site.classList.add("boom")
+    }
+    let disableField = document.getElementById('field')
+    disableField.classList.add("disabled")
+    document.getElementById('result').innerText = "Game Over"
+    document.getElementById('reaction_face').innerText = "🤯"
+    clearInterval(timer);
+}
+
+//Verifica e anuncia se o jogador venceu 
+function CheckWinCon() {
+    if (WinCondition['toBeCleared'] == WinCondition['Cleared'] && WinCondition['toBeCleared'] != 0) {
+        document.getElementById('result').innerText = "Você ganhou, parabéns!"
+        document.getElementById('field').classList.add("disabled")
+        document.getElementById('reaction_face').innerText = "😎"
+    }
+}
+
+
+
+function Submit(level) {
+    let rows
+    let columns
+    switch (level) {
+        case 0:
+            // rows = document.getElementById('row').value
+            // columns = document.getElementById('column').value
+            break;
+        case 1:
+            rows = 8
+            columns = 8
+            break;
+        case 2:
+            rows = 12
+            columns = 12
+            break;
+        case 3:
+            rows = 15
+            columns = 15
+    }
+    BuildField(rows, columns, Math.round((rows * columns) * 0.20))
+}
