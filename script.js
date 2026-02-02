@@ -168,6 +168,9 @@ function SetOnClick(i, k, coordinates, Node) {
                 WinCondition['Cleared'] = WinCondition['Cleared'] + 1
                 e.target.classList.remove("hidden")
                 CheckWinCon()
+
+
+                // Caso o número esteja revelado e o seu valor seja igual a quantidade de bandeiras adjacentes, revela os nodes adjacentes sem bandeiras
             } else if (!Node.classList.contains("hidden")) {
                 nodesAround.forEach(e => {
                     if (e.classList.contains("flag")) {
@@ -179,7 +182,6 @@ function SetOnClick(i, k, coordinates, Node) {
                     ClearField(Node, avoidList).forEach(e => {
                         e.click()
                     })
-                    // console.log(ClearField(Node, avoidList))
                 } else {
                     avoidList = []
                 }
@@ -203,6 +205,7 @@ function SetOnClick(i, k, coordinates, Node) {
                         emptyNodesList.push(e)
                     } else {
                         e.click()
+                        console.log(e)
                     }
                     avoidList.push(e)
                 }
@@ -227,7 +230,7 @@ function SetOnClick(i, k, coordinates, Node) {
     }
 }
 
-// Função com efeito recursivo para abrir os Nodes em cadeia
+// Retorna uma lista de nodes adjacentes e ocultos. Com uma lista de filtragem como parâmetro
 function ClearField(node, avoidList) {
     let result = []
     Peek(node.id.split(",")[0], node.id.split(",")[1]).forEach(e => {
@@ -236,7 +239,7 @@ function ClearField(node, avoidList) {
             e.firstChild.style.display = 'none'
             document.getElementById('counter').innerText = Number(document.getElementById('counter').innerText) + 1
         }
-        if (e.classList.contains("hidden") && !e.classList.contains("flag") && avoidList.indexOf(e) === -1) {
+        if (e.classList.contains("hidden") && avoidList.indexOf(e) === -1) {
             result.push(e)
         }
     })
@@ -247,8 +250,9 @@ function ClearField(node, avoidList) {
 
 //Anuncia que o jogador perdeu
 function GameOver(coordinates) {
+    let site = null
     for (i of coordinates) {
-        let site = document.getElementById(i)
+        site = document.getElementById(i)
         site.classList.add("boom")
     }
     let disableField = document.getElementById('field')
