@@ -10,10 +10,6 @@ main {
     margin: 0 auto;
 }
 
-/* .field{
-    border: 5px, solid, beige;
-} */
-
 ul {
     list-style: none;
     display: flex;

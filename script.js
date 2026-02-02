@@ -1,9 +1,3 @@
-// ÚLTIMA EDIÇÃO 18/06
-// Estava tentando fazer os campos vazios ativar os campos adjacentes sem arriscar overflow exception
-// Último empasse foi ao tentar fazer primeiro o campo vazio que foi clicado revelar os campos numéricos adjacentes à ele
-// Por algúm motivo, os campos de cima e da esquerda estão respondendo como deveria mas o de baixo e o da direita não.
-// As vezes um campo numérico da mesma linha porém várias colunas à direita é revelado ao invés de ser o adjacente à direita
-
 const WinCondition = {
     toBeCleared: 0,
     Cleared: 0
@@ -35,10 +29,6 @@ class Timer {
                 this.hour++
             }
             this.CurrentTime = `${this.hour < 10 ? '0' + this.hour : this.hour}:${this.minute < 10 ? '0' + this.minute : this.minute}:${this.second < 10 ? '0' + this.second : this.second}`
-
-            // HTMLtimer.innerText = time
-            
-            // document.getElementById('timer').innerText = this.CurrentTime
         }, 1000)
     }
     StopTimer() {
@@ -47,8 +37,6 @@ class Timer {
 }
 
 const JStimer = new Timer()
-
-
 
 function BuildField(rows, columns, bombs) {
 
@@ -59,10 +47,6 @@ function BuildField(rows, columns, bombs) {
     counter.innerText = bombs
     let reaction = document.getElementById('reaction_face')
     reaction.innerText = "🙂"
-
-    // Carregando timer
-    JStimer.StopTimer()
-    JStimer.StartTimer()
 
     // Limpando o campo anterior
     let field = document.getElementById('field')
@@ -80,8 +64,9 @@ function BuildField(rows, columns, bombs) {
         newRow.className = "Row";
         for (let k = 0; k < columns; k++) {
             let newColumn = document.createElement('li')
-
             let flagslot = document.createElement('img')
+            
+            // Configurando os elementos HTML
             flagslot.style.display = 'none'
             flagslot.src = 'imagens/bandeira.png'
             flagslot.classList.add("flag")
@@ -118,9 +103,6 @@ function BuildField(rows, columns, bombs) {
     let fieldSize = document.getElementsByClassName('Column')
     WinCondition['Cleared'] = 0
     WinCondition['toBeCleared'] = fieldSize.length - bombs
-    console.log(fieldSize.length)
-    console.log(bombs)
-    console.log(WinCondition['toBeCleared'])
 
     // Plantando as bombas
     let coordinates = new Array(bombs)
@@ -147,9 +129,12 @@ function BuildField(rows, columns, bombs) {
         }
     }
 
-
+    // Reiniciando o timer
+    JStimer.StopTimer()
+    JStimer.StartTimer()
 }
 
+// Função para retornar a lista de campos em torno da coordenada parâmetro
 function Peek(StringRow, StringColumn) {
     let row = Number(StringRow)
     let column = Number(StringColumn)
@@ -235,7 +220,7 @@ function GameOver(coordinates, timer) {
     document.getElementById('result').innerText = "Game Over"
     document.getElementById('reaction_face').innerText = "🤯"
     JStimer.StopTimer()
-    
+
 }
 
 //Verifica e anuncia se o jogador venceu 
