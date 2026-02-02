@@ -14,43 +14,55 @@ class Timer {
         this.second = 0
         this.minute = 0
         this.hour = 0
-        this.time = `00:00:00`
+        this.CurrentTime = `00:00:00`
         this.timer = null
-
-
-        StartTimer() 
-            this.timer = setInterval(() => {
-                second++
-                if (second == 60) {
-                    second = 0
-                    minute++
-                }
-                if (minute == 60) {
-                    minute = 0
-                    hour++
-                }
-                time = `${hour < 10 ? '0' + hour : hour}:${minute < 10 ? '0' + minute : minute}:${second < 10 ? '0' + second : second}`
-
-                HTMLtimer.innerText = time
-            }, 1000)
-        }
-            
     }
+
+    StartTimer() {
+        this.second = 0
+        this.minute = 0
+        this.hour = 0
+        this.CurrentTime = `00:00:00`
+        this.timer = setInterval(() => {
+            document.getElementById('timer').innerText = this.CurrentTime
+            this.second++
+            if (this.second == 60) {
+                this.second = 0
+                this.minute++
+            }
+            if (this.minute == 60) {
+                this.minute = 0
+                this.hour++
+            }
+            this.CurrentTime = `${this.hour < 10 ? '0' + this.hour : this.hour}:${this.minute < 10 ? '0' + this.minute : this.minute}:${this.second < 10 ? '0' + this.second : this.second}`
+
+            // HTMLtimer.innerText = time
+            
+            // document.getElementById('timer').innerText = this.CurrentTime
+        }, 1000)
+    }
+    StopTimer() {
+        clearInterval(this.timer)
+    }
+}
+
+const JStimer = new Timer()
 
 
 
 function BuildField(rows, columns, bombs) {
 
     // Iniciando o jogo
-    let fieldSize = document.getElementsByTagName('li')
-    WinCondition['Cleared'] = 0
-    WinCondition['toBeCleared'] = fieldSize.length - bombs
     let header = document.getElementById('header')
     header.style.display = 'block'
     let counter = document.getElementById('counter')
     counter.innerText = bombs
     let reaction = document.getElementById('reaction_face')
     reaction.innerText = "🙂"
+
+    // Carregando timer
+    JStimer.StopTimer()
+    JStimer.StartTimer()
 
     // Limpando o campo anterior
     let field = document.getElementById('field')
@@ -65,8 +77,10 @@ function BuildField(rows, columns, bombs) {
     for (let i = 0; i < rows; i++) {
         let newRow = document.createElement('ul');
         newRow.id = "Row " + i;
+        newRow.className = "Row";
         for (let k = 0; k < columns; k++) {
             let newColumn = document.createElement('li')
+
             let flagslot = document.createElement('img')
             flagslot.style.display = 'none'
             flagslot.src = 'imagens/bandeira.png'
@@ -74,6 +88,7 @@ function BuildField(rows, columns, bombs) {
             newColumn.appendChild(flagslot)
             newColumn.id = i + "," + k;
             newColumn.classList.add("Node");
+            newColumn.classList.add("Column");
             newColumn.classList.add("hidden");
             newColumn.addEventListener("mousedown", (e) => {
                 reaction.innerText = "😮"
@@ -99,12 +114,13 @@ function BuildField(rows, columns, bombs) {
         field.appendChild(newRow);
     }
 
-    // Iniciando o timer
-    let HTMLtimer = document.getElementById('timer')
-    let second = 0
-    let minute = 0
-    let hour = 0
-    let time = `00:00:00`
+    // Definindo condição de vitória
+    let fieldSize = document.getElementsByClassName('Column')
+    WinCondition['Cleared'] = 0
+    WinCondition['toBeCleared'] = fieldSize.length - bombs
+    console.log(fieldSize.length)
+    console.log(bombs)
+    console.log(WinCondition['toBeCleared'])
 
     // Plantando as bombas
     let coordinates = new Array(bombs)
@@ -117,7 +133,7 @@ function BuildField(rows, columns, bombs) {
         let site = document.getElementById(newSpot.toString())
         site.addEventListener("click", (e) => {
             if (!e.target.classList.contains("flag")) {
-                GameOver(coordinates, JStimer)
+                GameOver(coordinates)
             }
         });
     }
@@ -218,7 +234,8 @@ function GameOver(coordinates, timer) {
     disableField.classList.add("disabled")
     document.getElementById('result').innerText = "Game Over"
     document.getElementById('reaction_face').innerText = "🤯"
-    clearInterval(timer);
+    JStimer.StopTimer()
+    
 }
 
 //Verifica e anuncia se o jogador venceu 
@@ -227,6 +244,7 @@ function CheckWinCon() {
         document.getElementById('result').innerText = "Você ganhou, parabéns!"
         document.getElementById('field').classList.add("disabled")
         document.getElementById('reaction_face').innerText = "😎"
+        JStimer.StopTimer()
     }
 }
 
