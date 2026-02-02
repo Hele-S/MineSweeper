@@ -65,7 +65,7 @@ function BuildField(rows, columns, bombs) {
         for (let k = 0; k < columns; k++) {
             let newColumn = document.createElement('li')
             let flagslot = document.createElement('img')
-            
+
             // Configurando os elementos HTML
             flagslot.style.display = 'none'
             flagslot.src = 'imagens/bandeira.png'
@@ -160,10 +160,12 @@ function SetOnClick(i, k, coordinates, Node) {
 
     // Campos com números
     if (bombsAround > 0) {
+        Node.innerHTML = bombsAround
         Node.onclick = (e) => {
+            Node.innerHTML = bombsAround
             if (Node.classList.contains("hidden") && !Node.classList.contains("flag")) {
                 Node.classList.add("number")
-                e.target.innerHTML = bombsAround
+                e.innerHTML = bombsAround
                 WinCondition['Cleared'] = WinCondition['Cleared'] + 1
                 e.target.classList.remove("hidden")
                 CheckWinCon()
@@ -173,8 +175,12 @@ function SetOnClick(i, k, coordinates, Node) {
                         avoidList.push(e)
                     }
                 });
+
                 if (avoidList.length == bombsAround) {
-                    ClearField(Node, avoidList)
+                    ClearField(Node, avoidList).forEach(e => {
+                        e.click()
+                    })
+                    // console.log(ClearField(Node, avoidList))
                 } else {
                     avoidList = []
                 }
@@ -186,28 +192,57 @@ function SetOnClick(i, k, coordinates, Node) {
     } else {
         Node.classList.add("empty")
         Node.onclick = () => {
-            if (Node.classList.contains("hidden") && !Node.classList.contains("flag")) {
-                Node.classList.remove("hidden")
-                Node.classList.add("clear")
-                WinCondition['Cleared'] = WinCondition['Cleared'] + 1
-                ClearField(Node, [])
-                CheckWinCon()
+            let emptyNodesList = [Node]
+            let currentList = []
+            let currentNode = Node
+            let currentI = 0
+            avoidList.push(currentNode)
+            for (currentI = 0; true; currentI++) {
+                currentList = ClearField(currentNode, avoidList)
+                currentList.forEach(e => {
+                    if (e.classList.contains("empty")) {
+                        emptyNodesList.push(e)
+                    } else {
+                        e.click()
+                    }
+                    avoidList.push(e)
+                }
+                )
+                if (emptyNodesList[currentI] === undefined) {
+                    console.log("quebrou na posição: " + currentI)
+                    break
+                }
+                currentNode = emptyNodesList[currentI]
             }
+
+            avoidList.forEach(e => {
+                if (e.classList.contains("hidden") && !e.classList.contains("flag")) {
+                    e.classList.remove("hidden")
+                    e.classList.add("clear")
+                    WinCondition['Cleared'] = WinCondition['Cleared'] + 1
+                }
+            })
+            CheckWinCon()
+
         }
     }
 }
 
 // Função com efeito recursivo para abrir os Nodes em cadeia
 function ClearField(node, avoidList) {
+    let result = []
     Peek(node.id.split(",")[0], node.id.split(",")[1]).forEach(e => {
         if (e.classList.contains("flag") && avoidList.indexOf(e) === -1) {
             e.classList.remove("flag")
         }
-        if (e.classList.contains("hidden") && !e.classList.contains("flag")) {
-            e.click() //suscetível a stack overflow !
+        if (e.classList.contains("hidden") && !e.classList.contains("flag") && avoidList.indexOf(e) === -1) {
+            result.push(e)
         }
     })
+    return result
 }
+
+
 
 //Anuncia que o jogador perdeu
 function GameOver(coordinates, timer) {
@@ -240,8 +275,8 @@ function Submit(level) {
     let columns
     switch (level) {
         case 0:
-            // rows = document.getElementById('row').value
-            // columns = document.getElementById('column').value
+            rows = document.getElementById('row').value
+            columns = document.getElementById('column').value
             break;
         case 1:
             rows = 8
@@ -255,5 +290,5 @@ function Submit(level) {
             rows = 15
             columns = 15
     }
-    BuildField(rows, columns, Math.round((rows * columns) * 0.20))
+    BuildField(rows, columns, Math.round((rows * columns) * 0.2))
 }

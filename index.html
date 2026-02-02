@@ -10,6 +10,9 @@
 </head>
 
 <body>
+    <button onclick="Submit(0)">custom</button>
+    <input type="text" placeholder="linhas" id="row">
+    <input type="text" placeholder="colunas" id="column">
     <button onclick="Submit(1)">fácil</button>
     <button onclick="Submit(2)">médio</button>
     <button onclick="Submit(3)">difícil</button>
@@ -18,8 +21,8 @@
         <div id="header" style="display: none;">
             <div id="reaction_face"></div>
             <p> <img src="imagens/bandeira.png" class="flag" alt="flag"> Bombas restantes: <span id="counter"></span>
-            <div id="timer">00:00:00</div>
-
+            <div id="timer"></div>
+            <!-- <div id="counter"></div> -->
         </div>
         
         <div id="field"></div>
