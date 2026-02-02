@@ -160,7 +160,6 @@ function SetOnClick(i, k, coordinates, Node) {
 
     // Campos com números
     if (bombsAround > 0) {
-        Node.innerHTML = bombsAround
         Node.onclick = (e) => {
             Node.innerHTML = bombsAround
             if (Node.classList.contains("hidden") && !Node.classList.contains("flag")) {
@@ -216,7 +215,7 @@ function SetOnClick(i, k, coordinates, Node) {
             }
 
             avoidList.forEach(e => {
-                if (e.classList.contains("hidden") && !e.classList.contains("flag")) {
+                if (e.classList.contains("hidden")) {
                     e.classList.remove("hidden")
                     e.classList.add("clear")
                     WinCondition['Cleared'] = WinCondition['Cleared'] + 1
@@ -234,6 +233,8 @@ function ClearField(node, avoidList) {
     Peek(node.id.split(",")[0], node.id.split(",")[1]).forEach(e => {
         if (e.classList.contains("flag") && avoidList.indexOf(e) === -1) {
             e.classList.remove("flag")
+            e.firstChild.style.display = 'none'
+            document.getElementById('counter').innerText = Number(document.getElementById('counter').innerText) + 1
         }
         if (e.classList.contains("hidden") && !e.classList.contains("flag") && avoidList.indexOf(e) === -1) {
             result.push(e)
@@ -245,7 +246,7 @@ function ClearField(node, avoidList) {
 
 
 //Anuncia que o jogador perdeu
-function GameOver(coordinates, timer) {
+function GameOver(coordinates) {
     for (i of coordinates) {
         let site = document.getElementById(i)
         site.classList.add("boom")
@@ -290,5 +291,5 @@ function Submit(level) {
             rows = 15
             columns = 15
     }
-    BuildField(rows, columns, Math.round((rows * columns) * 0.2))
+    BuildField(rows, columns, Math.round((rows * columns) * 0.15))
 }
